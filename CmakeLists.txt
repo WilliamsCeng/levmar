@@ -1,0 +1,20 @@
+# Created By: Vineeth Yeevani
+# Date: December 25, 2018
+# Escape Technologies, Inc. Copyright 2018
+
+cmake_minimum_required(VERSION 2.8)
+project(hls_playground)
+
+set (hls_playground_VERSION_MAJOR 1)
+set (hls_playground_VERSION_MINOR 0)
+
+find_package(OpenCV REQUIRED)
+
+include_directories(include)
+
+set(SOURCES src/levmar.cpp src/matrix.cpp src/vector.cpp src/linalg.cpp src/main.cpp)
+
+
+
+add_executable(hls_playground ${SOURCES})
+target_link_libraries(hls_playground ${OpenCV_LIBS})
