@@ -11,8 +11,7 @@
 
 #include "levmar.hpp"
 
-// Default constructor
-levmar_solver::levmar_solver()
+void levmar_solver::init()
 {
     verbose = 0;
     max_it = 10000;
@@ -20,12 +19,50 @@ levmar_solver::levmar_solver()
     up_factor = 10;
     down_factor = 10;
     target_derr = 1e-12;
+}
+
+// Default constructor
+levmar_solver::levmar_solver()
+{
+    init();
 
     // Demonstrating how solver data is used keep in
     // mind static data is not destroyed when a function ends
     // so all data will be persisted forever
     // create_matrix_2d_data(h, 10, 10, double);
     // create_matrix_2d_data(ch, 10, 10, double);
+}
+
+levmar_solver::levmar_solver(vector<double> input_g, vector<double> input_d, vector<double> input_delta,
+                             vector<double> input_newpar, matrix_2d<double> input_h, matrix_2d<double> input_ch)
+{
+    g = input_g;
+    d = input_d;
+    delta = input_delta;
+    newpar = input_newpar;
+    h = input_h;
+    ch = input_ch;
+    init();
+}
+
+levmar_solver::levmar_solver(int n_param, double *g_data, double *d_data, double *delta_data,
+                             double *newpar_data, double *h_data, double *ch_data)
+{
+    g = vector<double>(g_data, n_param);
+    d = vector<double>(d_data, n_param);
+    delta = vector<double>(delta_data, n_param);
+    newpar = vector<double>(newpar_data, n_param);
+    h = matrix_2d<double>(h_data, n_param, n_param);
+    ch = matrix_2d<double>(ch_data, n_param, n_param);
+
+    init();
+
+    g.clear();
+    d.clear();
+    delta.clear();
+    newpar.clear();
+    h.clear();
+    ch.clear();
 }
 
 // Reset function

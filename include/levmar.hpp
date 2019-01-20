@@ -14,7 +14,7 @@
 
 #include "linalg.hpp"
 
-#define create_levmar_static_var(size)             \
+#define create_levmar_data_var(size)               \
   {                                                \
     create_vec_data(g, size, double);              \
     create_vec_data(d, size, double);              \
@@ -23,6 +23,19 @@
     create_matrix_2d_data(h, size, size, double);  \
     create_matrix_2d_data(ch, size, size, double); \
   }
+
+#define create_levmar_static_var(size) \
+  {                                    \
+    static double g[size];             \
+    static double d[size];             \
+    static double delta[size];         \
+    static double newpar[size];        \
+    static double h[size * size];      \
+    static double ch[size * size];     \
+  }
+
+#define create_levmar_params double *g, double *d, double *delta, \
+                             double *newpar, double *h, double *ch
 
 class levmar_solver
 {
@@ -42,15 +55,19 @@ protected:
   matrix_2d<double> h, ch;
 
 public:
+  void init();
   // Constructor
   levmar_solver();
-
+  levmar_solver(vector<double> g, vector<double> d, vector<double> delta,
+                               vector<double> newpar, matrix_2d<double> h, matrix_2d<double> ch);
+  levmar_solver(int n_param, double *g, double *d, double *delta,
+                               double *newpar, double *h, double *ch);
   // Reset state
   void reset();
 
   // Virtual functions for derived classes to fit
   virtual double func(vector<double>, int) = 0;
-  virtual void grad(vector<double>, vector<double>, int) {};
+  virtual void grad(vector<double>, vector<double>, int){};
 
   /* perform least-squares minimization using the Levenberg-Marquardt
     algorithm.  The arguments are as follows:

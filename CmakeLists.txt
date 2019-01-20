@@ -12,7 +12,7 @@ find_package(OpenCV REQUIRED)
 
 include_directories(include)
 
-set(SOURCES src/levmar.cpp src/matrix.cpp src/vector.cpp src/linalg.cpp src/main.cpp)
+set(SOURCES src/levmar.cpp src/matrix.cpp src/vector.cpp src/linalg.cpp src/hls_testbench.cpp src/top.cpp)
 
 
 
